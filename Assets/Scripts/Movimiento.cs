@@ -2,33 +2,26 @@ using UnityEngine;
 
 public class Movimiento : MonoBehaviour
 {
-    private Rigidbody rb;
-
-    public float velocidad = 5f;
-    public Transform camara;
-
+    private Rigidbody rb; //declaro la variable
+    private Vector3 movementDirection;
+    [SerializeField] private float horizontalMovement;
+    [SerializeField] private float verticalMovement;
+    [SerializeField] private float movementVelocity = 25;
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>(); //inicializo la variable
+        movementDirection = new Vector3(horizontalMovement, 0, verticalMovement);
     }
-
+    //se ejecuta si o si 100v/s
+    //ej evitar q se mueva mas rapido en un pc q en otro
     void FixedUpdate()
     {
-        float movimientoH = Input.GetAxis("Horizontal");
-        float movimientoV = Input.GetAxis("Vertical");
-
-        Vector3 adelante = camara.forward;
-        Vector3 derecha = camara.right;
-
-        adelante.y = 0f;
-        derecha.y = 0f;
-
-        adelante.Normalize();
-        derecha.Normalize();
-
- 
-        Vector3 movimiento = adelante * movimientoV + derecha * movimientoH;
-
-        rb.AddForce(movimiento * velocidad);
+        rb.AddForce(movementDirection*movementVelocity, ForceMode.Acceleration);
+    }
+    void Update()
+    {
+       horizontalMovement = Input.GetAxis("Horizontal");
+        verticalMovement = Input.GetAxis("Vertical");
+        movementDirection = new Vector3 (horizontalMovement, 0, verticalMovement);
     }
 }
